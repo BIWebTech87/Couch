@@ -1,16 +1,17 @@
 import { Text, View } from "react-native";
+import React from "react";
+import Navbar from "@/components/NavBar/Navbar";
 
 export default function Index() {
   return (
     <View
       style={{
         flex: 1,
-        borderWidth: 2,
         margin: 'auto',
-        width: '90%',
+        width: '100%',
       }}
     >
-      <Text>Boris {'\n'} Isac!!!</Text>
+      <Navbar />
     </View>
   );
 }
