@@ -1,43 +1,97 @@
-import React from 'react';
-import {Text, Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import React, { useState } from 'react';
+import { Text, Image, SafeAreaView, TouchableOpacity, View } from 'react-native';
+import styles from './NavBar.styles';
 
-const NavBar = () => {
-    return (
-        <View>
-            <Image source={require('../../../assets/logo.jpg')} style={styles.logo}/>
-            <TouchableOpacity onPress={() => console.log('Go Home')}>
-                <Text style={{fontSize: 18}}>Home</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => console.log('Go About')}>
-                <Text style={{fontSize: 18}}>About</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => console.log('Go Contact')}>
-                <Text style={{fontSize: 18}}>Contact</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => console.log('Go Mark Consult')}>
-                <Text style={{fontSize: 18}}>Mark Consult</Text>
-            </TouchableOpacity>
-        </View>
-    );
+const handleLinkClick = (linkName: string) => {
+  console.log(`Go ${linkName}`);
 };
 
-const styles = StyleSheet.create({
-    container: {
-        paddingTop: 50,
-        paddingHorizontal: 20,
-        backgroundColor: '#f8f8f8',
-        alignItems: 'center',
-    },
-    logo: {
-        width: 100,
-        height: 100,
-        marginBottom: 20,
-    },
-    link: {
-        fontSize: 18,
-        color: '#007AFF',
-        marginVertical: 5,
-    },
-});
+const links = ['Home', 'About', 'Contact', 'Mark Consult'];
+const lang = ['PT', 'EN', 'RU', 'RO'];
+
+const NavBar = () => {
+  const [activeLang, setActiveLang] = useState('EN');
+
+  const renderFlagBackground = (code: string) => {
+    switch (code) {
+      case 'RU':
+        return (
+          <View style={styles.flagHorizontal}>
+            <View style={{ flex: 1, backgroundColor: '#fff' }} />
+            <View style={{ flex: 1, backgroundColor: '#0033a0' }} />
+            <View style={{ flex: 1, backgroundColor: '#d52b1e' }} />
+          </View>
+        );
+      case 'PT':
+        return (
+          <View style={styles.flagVertical}>
+            <View style={{ flex: 1, backgroundColor: '#006600' }} />
+            <View style={{ flex: 1, backgroundColor: '#ff0000' }} />
+          </View>
+        );
+      case 'EN':
+        return (
+          <View style={styles.flagHorizontal}>
+            <View style={{ flex: 1, backgroundColor: '#d80027' }} />
+            <View style={{ flex: 1, backgroundColor: '#fff' }} />
+            <View style={{ flex: 1, backgroundColor: '#d80027' }} />
+          </View>
+        );
+      case 'RO':
+        return (
+          <View style={styles.flagVertical}>
+            <View style={{ flex: 1, backgroundColor: '#002b7f' }} />
+            <View style={{ flex: 1, backgroundColor: '#fcd116' }} />
+            <View style={{ flex: 1, backgroundColor: '#ce1126' }} />
+          </View>
+        );
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <SafeAreaView style={{ backgroundColor: '#fff' }}>
+      <View style={styles.fullNavBar}>
+        <View style={styles.logo_container}>
+          <Image source={require('../../../assets/images/logo.png')} style={styles.logo} />
+          <Text style={styles.logo_text}>Natasha Couch</Text>
+        </View>
+
+        <View style={styles.links_list}>
+          {links.map((link) => (
+            <TouchableOpacity key={link} onPress={() => handleLinkClick(link)}>
+              <Text style={styles.link}>{link}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        <View style={styles.lng}>
+          {lang.map((code) => (
+            <TouchableOpacity
+              key={code}
+              onPress={() => {
+                handleLinkClick(code);
+                setActiveLang(code);
+              }}
+              style={styles.lng_obj_container}
+            >
+              {activeLang === code && renderFlagBackground(code)}
+              <Text
+                style={[
+                  styles.lng_obj,
+                  activeLang === code && styles.activeLng,
+                  activeLang === code && code === 'EN' && styles.colorBlack,
+                ]}
+              >
+                {code}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </View>
+    </SafeAreaView>
+  );
+};
 
 export default NavBar;
